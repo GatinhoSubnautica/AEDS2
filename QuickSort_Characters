@@ -1,0 +1,376 @@
+/*Código para ler informações de personagens fictícios de um arquivo CSV, permitindo que o usuário 
+escolha alguns desses personagens para ordená-los com base em critérios específicos usando o algoritmo 
+QuickSort, e então registra estatísticas da ordenação em um arquivo de log.*/
+import java.util.List;
+import java.util.Scanner;
+import java.time.LocalDate;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+
+// Definição da classe Character para representar um personagem fictício
+class Character {
+    private String id; 
+    String name; 
+    List<String> alternate_names; // Lista de nomes alternativos do personagem
+    String house; 
+    String ancestry;
+    String species; 
+    String patronus; 
+    boolean hogwartsStaff; 
+    boolean hogwartsStudent; 
+    String actorName; 
+    boolean alive; 
+    LocalDate dateOfBirth; 
+    int yearOfBirth; 
+    String eyeColour; 
+    String gender; 
+    String hairColour; 
+    boolean Wizard; // Indica se o personagem é um bruxo/mago
+
+    // Construtor para inicializar um objeto Character com todas as informações
+    public Character(String id, String name, List<String> alternate_names, String house, String ancestry,
+            String species, String patronus, String hogwartsStaff, String hogwartsStudent, String actorName,
+            String alive, LocalDate dateOfBirth, int yearOfBirth, String eyeColour, String gender, String hairColour,
+            String Wizard) {
+// Verifica se os campos não são nulos e, em seguida, atribui os valores ao objeto Character
+        if (id != null)
+            this.id = id;
+        if (name != null)
+            this.name = name;
+        if (alternate_names != null)
+            this.alternate_names = alternate_names;
+        if (house != null)
+            this.house = house;
+        if (ancestry != null)
+            this.ancestry = ancestry;
+        if (species != null)
+            this.species = species;
+        if (patronus != null)
+            this.patronus = patronus;
+        if (hogwartsStaff.charAt(0) == 'V') // Verifica se a primeira letra é 'V' para atribuir true
+            this.hogwartsStaff = true;
+        if (hogwartsStudent.charAt(0) == 'V') // Verifica se a primeira letra é 'V' para atribuir true
+            this.hogwartsStudent = true;
+        if (actorName != null)
+            this.actorName = actorName;
+        if (alive.charAt(0) == 'V') // Verifica se a primeira letra é 'V' para atribuir true
+            this.alive = true;
+        if (dateOfBirth != null)
+            this.dateOfBirth = dateOfBirth;
+        if (yearOfBirth != 0)
+            this.yearOfBirth = yearOfBirth;
+        if (eyeColour != null)
+            this.eyeColour = eyeColour;
+        if (gender != null)
+            this.gender = gender;
+        if (hairColour != null)
+            this.hairColour = hairColour;
+        if (Wizard.charAt(0) == 'V') // Verifica se a primeira letra é 'V' para atribuir true
+            this.Wizard = true;
+    }
+
+    // Construtor para inicializar um objeto Character vazio
+    public Character() {
+        this.id = "";
+        this.name = "";
+        this.alternate_names = new ArrayList<>();
+        this.house = "";
+        this.ancestry = "";
+        this.species = "";
+        this.patronus = "";
+        this.hogwartsStaff = false; 
+        this.hogwartsStudent = false; 
+        this.actorName = "";
+        this.alive = false; 
+        this.dateOfBirth = null;
+        this.yearOfBirth = Integer.MIN_VALUE;
+        this.eyeColour = "";
+        this.gender = "";
+        this.hairColour = "";
+        this.Wizard = false; 
+    }
+
+    // Getters e setters para acessar e modificar os campos privados
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public List<String> getAlternate_names() {
+        return alternate_names;
+    }
+      public void setAlternate_names(List<String> alternate_names) {
+        this.alternate_names = alternate_names;
+    }
+    public void addAlternate_names(String alternateName) {
+        if (alternate_names == null) {
+            alternate_names = new ArrayList<>();
+        }
+        alternate_names.add(alternateName);
+    }
+    public String getHouse() {
+        return house;
+    }
+    public void setHouse(String house) {
+        this.house = house;
+    }
+    public String getAncestry() {
+        return ancestry;
+    }
+    public void setAncestry(String ancestry) {
+        this.ancestry = ancestry;
+    }
+    public String getSpecies() {
+        return species;
+    }
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+    public String getPatronus() {
+        return patronus;
+    }
+    public void setPatronus(String patronus) {
+        this.patronus = patronus;
+    }
+    public Boolean getHogwartsStaff() {
+        return hogwartsStaff;
+    }
+    public void setHogwartsStaff(Boolean hogwartsStaff) {
+        this.hogwartsStaff = hogwartsStaff;
+    }
+    public boolean getHogwartsStudent() {
+        return hogwartsStudent;
+    }
+    public void setHogwartsStudent(Boolean hogwartsStudent) {
+        this.hogwartsStudent = hogwartsStudent;
+    }
+    public String getActorName() {
+        return actorName;
+    }
+    public void setActorName(String actorName) {
+        this.actorName = actorName;
+    }
+    public Boolean getAlive() {
+        return alive;
+    }
+    public void setAlive(Boolean alive) {
+        this.alive = alive;
+    }
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+    public String getEyeColour() {
+        return eyeColour;
+    }
+    public void setEyeColour(String eyeColour) {
+        this.eyeColour = eyeColour;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public String getHairColour() {
+        return hairColour;
+    }
+    public void setHairColour(String hairColour) {
+        this.hairColour = hairColour;
+    }
+    public boolean isWizard() {
+        return Wizard;
+    }
+    public void setWizard(boolean wizard) {
+        Wizard = wizard;
+    }
+    // Método para clonar um objeto Character
+    public Character clone() {
+        Character clone = new Character();
+        clone.id = this.id;
+        clone.name = this.name;
+        clone.alternate_names = new ArrayList<>(this.alternate_names);
+        clone.house = this.house;
+        clone.ancestry = this.ancestry;
+        clone.species = this.species;
+        clone.patronus = this.patronus;
+        clone.hogwartsStaff = this.hogwartsStaff;
+        clone.hogwartsStudent = this.hogwartsStudent;
+        clone.actorName = this.actorName;
+        clone.alive = this.alive;
+        clone.dateOfBirth = this.dateOfBirth;
+        clone.yearOfBirth = this.yearOfBirth;
+        clone.eyeColour = this.eyeColour;
+        clone.gender = this.gender;
+        clone.hairColour = this.hairColour;
+        clone.Wizard = this.Wizard;
+        return clone;
+    }
+
+    // Método leitura para ler personagens do arquivo CSV
+    public List<Character> leitura(String file) throws IOException {
+        List<Character> total = new ArrayList<>();
+        try (BufferedReader ler = new BufferedReader(new FileReader(file))) {
+            String ln;
+            DateTimeFormatter dataForm = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String[] spl;
+            Character aSerAdicionado = new Character();
+            ler.readLine(); // Ignora a primeira linha (cabeçalho)
+            while ((ln = ler.readLine()) != null) {
+                spl = ln.split(";");
+                spl[2] = spl[2].replace("[", "")
+                        .replace("]", "")
+                        .replace("'", "");
+                if (spl[12].equals("23-6-1980"))
+                    spl[12] = "23-06-1980";
+                aSerAdicionado = new Character(
+                        spl[0],
+                        spl[1],
+                        Arrays.asList(spl[2].split(",")),
+                        spl[3],
+                        spl[4],
+                        spl[5],
+                        spl[6],
+                        spl[7],
+                        spl[8],
+                        spl[9],
+                        spl[10],
+                        LocalDate.parse(spl[12], dataForm),
+                        Integer.parseInt(spl[13]),
+                        spl[14],
+                        spl[15],
+                        spl[16],
+                        spl[17]);
+                total.add(aSerAdicionado);
+            }
+        }
+        return total;
+    }
+
+    // Método imprimir para mostrar as informações do personagem formatadas
+    public void imprimir() {
+        DateTimeFormatter dataForm = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dataF = dateOfBirth.format(dataForm);
+        String outrosNomes = alternate_names.toString();
+        outrosNomes = outrosNomes.replace("[", "{").replace("]", "}").replaceAll("\\s+", " ");
+        System.out.println("[" + id + " ## " + name + " ## " + outrosNomes + " ## " + house +
+                " ## " + ancestry + " ## " + species + " ## " + patronus + " ## " +
+                hogwartsStaff + " ## " + hogwartsStudent + " ## " + actorName +
+                " ## " + alive + " ## " + dataF + " ## " + yearOfBirth +
+                " ## " + eyeColour + " ## " + gender + " ## " + hairColour + " ## " + Wizard + "]");
+    }
+}
+
+// Classe QS contendo métodos relacionados à ordenação e interação com o usuário
+public class QS {
+    // Método swap para trocar duas posições na lista de personagens
+    public static void swap(List<Character> personagens, int a, int b) {
+        Character aux = personagens.get(a);
+        personagens.set(a, personagens.get(b));
+        personagens.set(b, aux);
+    }
+
+    // Método quickSort para ordenar os personagens com base em casa e nome 
+    public static void quickSort(List<Character> personagens, int[] cont, int esq, int dir, int k) {
+        int i = esq, j = dir;
+        Character pivo = personagens.get((dir + esq) / 2);
+        while (i <= j) {
+            while (personagens.get(i).getHouse().compareTo(pivo.getHouse()) < 0 ||
+                    (personagens.get(i).getHouse().compareTo(pivo.getHouse()) == 0
+                            && personagens.get(i).getName().compareTo(pivo.getName()) < 0)) {
+                cont[0]++;
+                i++;
+            }
+            while (personagens.get(j).getHouse().compareTo(pivo.getHouse()) > 0 ||
+                    (personagens.get(j).getHouse().compareTo(pivo.getHouse()) == 0
+                            && personagens.get(j).getName().compareTo(pivo.getName()) > 0)) {
+                cont[0]++;
+                j--;
+            }
+            if (i <= j) {
+                swap(personagens, i, j);
+                cont[1]++;
+                i++;
+                j--;
+            }
+        }
+        if (esq < j)
+            quickSort(personagens, cont, esq, j, k);
+        if (i < k && i < dir)
+            quickSort(personagens, cont, i, dir, k);
+    }
+
+    // Método log para registrar estatísticas em um arquivo de log
+    public static void log(int comparacoes, int movimentacoes, long tempoExecucao) {
+        String arq = "quickSort.txt";
+        try (FileWriter writer = new FileWriter(arq)) {
+            writer.write("Comparacoes" + comparacoes + "\t" + "Movimentacoes" + movimentacoes + "\t"
+                    + "Tempo(nanoSec)" + (tempoExecucao));
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar o log: " + e.getMessage());
+        }
+    }
+
+    // Método pesquisaId para buscar um personagem na lista pelo ID
+    public static Character pesquisaId(List<Character> total, String id) {
+        for (Character personagem : total) {
+            if (personagem.getId().equals(id)) {
+                return personagem.clone();
+            }
+        }
+        return null;
+    }
+
+    // Método Quick para interação com o usuário e ordenação dos personagens
+    public static void Quick(List<Character> total) {
+        List<Character> escolhidos = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        String id;
+        while (!(id = sc.nextLine()).equals("FIM")) {
+            Character atual = pesquisaId(total, id);
+            if (atual != null) {
+                escolhidos.add(pesquisaId(total, id));
+            }
+        }
+        int[] cont = new int[] { 0, 0 };
+        long comeco = System.nanoTime();
+        quickSort(escolhidos, cont, 0, (escolhidos.size() - 1), 10);
+        long fim = System.nanoTime();
+        long tempoExecucao = fim - comeco;
+        log(cont[0], cont[1], tempoExecucao);
+        for (int i = 0; i < 10; i++) {
+            escolhidos.get(i).imprimir();
+        }
+        sc.close();
+    }
+
+    // Método principal para iniciar o programa
+    public static void main(String[] args) throws Exception {
+        String file = "/tmp/characters.csv"; // Caminho do arquivo CSV contendo dados dos personagens
+        Character callF = new Character();
+        List<Character> total = new ArrayList<>();
+        total = callF.leitura(file); // Leitura dos personagens do arquivo
+
+        Quick(total); // Inicia a interação com o usuário e a ordenação dos personagens
+    }
+}
